@@ -89,3 +89,33 @@ async function getActress(id: number): Promise<Actress | null>{
     return null;
   }
 }
+
+//  Milestone 4
+//  Crea una funzione getAllActresses che chiama:
+
+//  GET /actresses
+//  La funzione deve restituire un array di oggetti Actress.
+
+//  Può essere anche un array vuoto.
+
+async function getAllActresses(): Promise<Actress[]> {
+  try{
+    const response = await fetch(`http://localhost:3333/actresses`);
+    if(!response.ok){
+      throw new Error(`Errore HTTP ${response.status}: ${response.statusText}`);
+    }
+    const dati: unknown = await response.json();
+    if(!(dati instanceof Array)){
+      throw new Error('Formato dati non valido');
+    }
+    const attrici = dati.filter(isActress);
+    return attrici;
+  }catch(error){
+    if(error instanceof Error){
+      console.error('Errore durante il recupero delle attrici:', error);
+    }else{
+      console.error('Errore sconosciuto:', error);
+    }
+    return [];
+  }
+}
